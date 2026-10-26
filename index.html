@@ -60,6 +60,55 @@
                 width: 65%;
                 display: flex;
                 flex-direction: column;
+                min-width: 0;
+            }
+
+            /* 16:9 banner: replaces the yellow + white rows for 5 seconds
+               every 15 seconds. The bottom scrolling strip stays visible. */
+            .top-info-area {
+                flex: 4;
+                min-height: 0;
+                display: flex;
+                flex-direction: column;
+                position: relative;
+                background: linear-gradient(to bottom, #fbd604 0 50%, #ffffff 50% 100%);
+                overflow: hidden;
+            }
+
+            .english-row,
+            .hindi-row {
+                flex: 1;
+                min-height: 0;
+            }
+
+            .banner-slot {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: linear-gradient(to bottom, #fbd604 0 50%, #ffffff 50% 100%);
+                opacity: 0;
+                visibility: hidden;
+                z-index: 2;
+                pointer-events: none;
+            }
+
+            .banner-slot.is-visible {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .banner-slot img {
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                object-position: center;
+            }
+
+            .info-row.is-hidden {
+                visibility: hidden;
             }
 
             .info-row {
@@ -144,19 +193,24 @@
             </div>
 
             <div class="info-section">
-                <div class="info-row english-row">
-                    <span class="station-name">CURRENT TEMPERATURE</span>
-                    <span class="eta">28°C</span>
-                </div>
-                <div class="info-row hindi-row">
-                    <span class="station-name">वर्तमान तापमान</span>
-                    <span class="eta">28°C</span>
+                <div class="top-info-area" id="topInfoArea">
+                    <div class="info-row english-row">
+                        <span class="station-name">CURRENT TEMPERATURE</span>
+                        <span class="eta">32°C</span>
+                    </div>
+                    <div class="info-row hindi-row">
+                        <span class="station-name">वर्तमान तापमान</span>
+                        <span class="eta">32°C</span>
+                    </div>
+                    <div class="banner-slot" id="bannerSlot" aria-label="Metro information banner">
+                        <!-- Place your 16:9 image beside this HTML file and name it banner.png -->
+                        <img src="banner.png" alt="Metro information banner">
+                    </div>
                 </div>
                 <div class="bottom-strip">
                     <div class="marquee-container">
                         <span class="marquee-text">
-                            Sunday, 25 October 2026 !!
-                        </span>
+                            Monday, 26 October 2026 Sector 11, Avas Vikas Colony, Lohamandi, Agra, Uttar Pradesh
                     </div>
                 </div>
             </div>
@@ -298,7 +352,22 @@
 
             resizeCanvas();
             setInterval(drawClock, 1000);
-            drawClock(); 
+            drawClock();
+
+            // Banner timing: show for 5 seconds in each 15-second cycle.
+            const bannerSlot = document.getElementById('bannerSlot');
+            const infoRows = document.querySelectorAll('.top-info-area .info-row');
+            const BANNER_VISIBLE_MS = 5000;
+            const CYCLE_MS = 15000;
+
+            function updateBannerVisibility() {
+                const showBanner = (Date.now() % CYCLE_MS) < BANNER_VISIBLE_MS;
+                bannerSlot.classList.toggle('is-visible', showBanner);
+                infoRows.forEach(row => row.classList.toggle('is-hidden', showBanner));
+            }
+
+            updateBannerVisibility();
+            setInterval(updateBannerVisibility, 100);
         </script>
     </body>
     </html>
