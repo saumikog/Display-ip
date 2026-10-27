@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Professional Metro Display - High Res with Marquee</title>
+        <title>Agra PA Display Board | Live Clock & Daily Information</title>
         <style>
             * {
                 margin: 0;
@@ -196,21 +196,20 @@
                 <div class="top-info-area" id="topInfoArea">
                     <div class="info-row english-row">
                         <span class="station-name">CURRENT TEMPERATURE</span>
-                        <span class="eta">32°C</span>
+                        <span class="eta" id="tempEnglish">26°C</span>
                     </div>
                     <div class="info-row hindi-row">
                         <span class="station-name">वर्तमान तापमान</span>
-                        <span class="eta">32°C</span>
+                        <span class="eta" id="tempHindi">26°C</span>
                     </div>
                     <div class="banner-slot" id="bannerSlot" aria-label="Metro information banner">
                         <!-- Place your 16:9 image beside this HTML file and name it banner.png -->
-                        <img src="banner.png" alt="Metro information banner">
+                        <img src="https://www.studyiq.com/articles/wp-content/uploads/2024/10/26134305/World-Day-for-Audiovisual-Heritage-27th-Oct-blog.png" alt="Metro information banner">
                     </div>
                 </div>
                 <div class="bottom-strip">
                     <div class="marquee-container">
-                        <span class="marquee-text">
-                            Monday, 26 October 2026 Sector 11, Avas Vikas Colony, Lohamandi, Agra, Uttar Pradesh
+                        <span class="marquee-text" id="marqueeText">Tuesday, 27 October 2026 • Sector 11, Avas Vikas Colony, Lohamandi, Agra, Uttar Pradesh</span>
                     </div>
                 </div>
             </div>
@@ -224,7 +223,7 @@
 
             // Pre-load your logo image 
             const logoImg = new Image();
-            logoImg.src = 'logo.jpg'; 
+            logoImg.src = 'logo.png'; 
             let logoLoaded = false;
             logoImg.onload = () => { logoLoaded = true; };
 
@@ -353,6 +352,35 @@
             resizeCanvas();
             setInterval(drawClock, 1000);
             drawClock();
+
+
+            // Daily board information: date updates automatically using the device's local date.
+            // Weather figures below are the Agra report checked on 27 October 2026 at 2:32 PM IST;
+            // refresh these values manually when updating the board on another day.
+            const boardWeather = {
+                temperature: '31°C',
+                condition: 'hazy sunshine',
+                high: '31°C',
+                low: '17°C',
+                checkedAt: '2:32 PM IST'
+            };
+
+            function updateBoardDateAndWeather() {
+                const now = new Date();
+                const dateText = new Intl.DateTimeFormat('en-IN', {
+                    weekday: 'long', day: '2-digit', month: 'long', year: 'numeric'
+                }).format(now);
+
+                const marquee = document.getElementById('marqueeText');
+                if (marquee) {
+                    marquee.textContent = `${dateText} • Agra weather: ${boardWeather.temperature}, ${boardWeather.condition} (checked ${boardWeather.checkedAt}) • Forecast high ${boardWeather.high}, low ${boardWeather.low} • Sector 11, Avas Vikas Colony, Lohamandi, Agra, Uttar Pradesh`;
+                }
+                document.title = `Agra PA Display Board | ${dateText}`;
+            }
+
+            updateBoardDateAndWeather();
+            // Recheck the calendar date periodically in case the display stays on overnight.
+            setInterval(updateBoardDateAndWeather, 60000);
 
             // Banner timing: show for 5 seconds in each 15-second cycle.
             const bannerSlot = document.getElementById('bannerSlot');
