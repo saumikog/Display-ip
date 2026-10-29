@@ -81,158 +81,37 @@
                 min-height: 0;
             }
 
-            /* Full weather dashboard overlay: confined to the yellow/white area. */
-            .weather-animation {
+            /* Video overlay covers the full information side, but never the clock. */
+            .info-section {
+                width: 65%;
+                display: flex;
+                flex-direction: column;
+                min-width: 0;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .video-overlay {
                 position: absolute;
                 inset: 0;
-                z-index: 3;
-                display: flex;
-                flex-direction: column;
-                gap: 0;
-                padding: 1.1% 1.6% 1.2%;
-                color: #eaf1ff;
-                background: #26344f;
-                opacity: 0;
-                visibility: hidden;
-                pointer-events: none;
-                overflow: hidden;
-                font-family: 'Segoe UI', Arial, sans-serif;
-            }
-
-            .weather-animation.is-visible {
-                opacity: 1;
-                visibility: visible;
-            }
-
-            .weather-topline {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                font-size: clamp(10px, 1.15vw, 20px);
-                font-weight: 700;
-                padding: 0 0 0.7%;
-            }
-
-            .weather-place {
-                font-size: clamp(9px, 0.95vw, 16px);
-                font-weight: 500;
-                color: #b9c8e2;
-            }
-
-            .weather-hours {
-                position: relative;
-                display: grid;
-                grid-template-columns: repeat(12, minmax(0, 1fr));
-                border: 1px solid rgba(210, 224, 250, 0.12);
-                border-radius: 8px 8px 0 0;
-                min-height: 26%;
-                padding: 1.2% 0 0.7%;
-                background: rgba(255,255,255,0.015);
-            }
-
-            .weather-hour {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: flex-start;
-                gap: 0.25em;
-                min-width: 0;
-                color: #c8d5eb;
-                font-size: clamp(8px, 0.95vw, 16px);
-                white-space: nowrap;
-            }
-
-            .weather-hour .hour-label {
-                color: #c5d3e9;
-            }
-
-            .weather-icon {
-                font-size: clamp(12px, 1.55vw, 27px);
-                line-height: 1.1;
-                filter: drop-shadow(0 1px 2px rgba(0,0,0,.25));
-            }
-
-            .weather-temp {
-                color: #a9bddb;
-                font-size: clamp(8px, 0.95vw, 16px);
-            }
-
-            .weather-chart {
-                position: relative;
-                flex: 1;
-                min-height: 0;
-                overflow: hidden;
-                border-left: 1px solid rgba(210, 224, 250, 0.12);
-                border-right: 1px solid rgba(210, 224, 250, 0.12);
-                background:
-                    linear-gradient(to bottom,
-                        transparent 24.5%, rgba(220,232,255,.13) 25%, transparent 25.5%,
-                        transparent 49.5%, rgba(220,232,255,.13) 50%, transparent 50.5%,
-                        transparent 74.5%, rgba(220,232,255,.13) 75%, transparent 75.5%);
-            }
-
-            .weather-grid-label {
-                position: absolute;
-                left: 1%;
-                z-index: 1;
-                color: #a8bad7;
-                font-size: clamp(8px, 0.9vw, 15px);
-            }
-
-            .weather-grid-label.l1 { top: 22%; }
-            .weather-grid-label.l2 { top: 47%; }
-            .weather-grid-label.l3 { top: 72%; }
-
-            .weather-area-svg {
-                position: absolute;
-                inset: 0 0 0 5%;
-                width: 95%;
-                height: 100%;
-            }
-
-            .weather-sun-event {
-                position: absolute;
-                bottom: 4%;
-                display: flex;
-                align-items: center;
-                gap: 0.25em;
-                color: #bdcbe1;
-                font-size: clamp(8px, 0.9vw, 15px);
-                white-space: nowrap;
-            }
-
-            .weather-sun-event.sunrise { left: 22%; }
-            .weather-sun-event.sunset { left: 69%; }
-
-            .weather-rain-row {
-                min-height: 10%;
-                display: grid;
-                grid-template-columns: repeat(12, minmax(0, 1fr));
-                align-items: center;
-                border: 1px solid rgba(210, 224, 250, 0.12);
-                border-radius: 0 0 8px 8px;
-                background: #1b527f;
-                overflow: hidden;
-            }
-
-            .rain-chance {
-                height: 100%;
-                display: flex;
+                z-index: 20;
+                display: none;
                 align-items: center;
                 justify-content: center;
-                color: #f1f6ff;
-                font-size: clamp(8px, 0.9vw, 15px);
-                font-weight: 700;
-                border-right: 1px solid rgba(255,255,255,.08);
+                background: #000;
+                overflow: hidden;
             }
 
-            .rain-chance:first-child {
-                background: repeating-linear-gradient(135deg, #52617b 0 3px, #34445e 3px 6px);
-                border-radius: 8px;
+            .video-overlay.is-visible {
+                display: flex;
             }
 
-            @media (prefers-reduced-motion: reduce) {
-                .weather-animation { transition: none; }
+            .video-overlay video {
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                background: #000;
             }
 
             .banner-slot {
@@ -356,60 +235,6 @@
                         <span class="station-name">वर्तमान तापमान</span>
                         <span class="eta" id="tempHindi">29°C</span>
                     </div>
-                    <div class="weather-animation" id="weatherAnimation" aria-label="Agra hourly weather overview">
-                        <div class="weather-topline">
-                            <span>Overview <span class="weather-place">• Agra, Uttar Pradesh</span></span>
-                            <span class="weather-place">Hourly forecast · °C</span>
-                        </div>
-                        <div class="weather-hours" id="weatherHours">
-                            <div class="weather-hour"><span class="hour-label">1 PM</span><span class="weather-icon">🌤️</span><span class="weather-temp">29°</span></div>
-                            <div class="weather-hour"><span class="hour-label">Now</span><span class="weather-icon">🌤️</span><span class="weather-temp">29°</span></div>
-                            <div class="weather-hour"><span class="hour-label">5 PM</span><span class="weather-icon">🌤️</span><span class="weather-temp">29°</span></div>
-                            <div class="weather-hour"><span class="hour-label">7 PM</span><span class="weather-icon">🌙</span><span class="weather-temp">27°</span></div>
-                            <div class="weather-hour"><span class="hour-label">9 PM</span><span class="weather-icon">🌙</span><span class="weather-temp">25°</span></div>
-                            <div class="weather-hour"><span class="hour-label">11 PM</span><span class="weather-icon">🌙</span><span class="weather-temp">25°</span></div>
-                            <div class="weather-hour"><span class="hour-label">1 AM</span><span class="weather-icon">🌙</span><span class="weather-temp">24°</span></div>
-                            <div class="weather-hour"><span class="hour-label">3 AM</span><span class="weather-icon">🌙</span><span class="weather-temp">23°</span></div>
-                            <div class="weather-hour"><span class="hour-label">5 AM</span><span class="weather-icon">🌙</span><span class="weather-temp">23°</span></div>
-                            <div class="weather-hour"><span class="hour-label">7 AM</span><span class="weather-icon">🌤️</span><span class="weather-temp">22°</span></div>
-                            <div class="weather-hour"><span class="hour-label">9 AM</span><span class="weather-icon">🌤️</span><span class="weather-temp">24°</span></div>
-                            <div class="weather-hour"><span class="hour-label">11 AM</span><span class="weather-icon">🌤️</span><span class="weather-temp">26°</span></div>
-                        </div>
-                        <div class="weather-chart" aria-label="Temperature trend through the next 24 hours">
-                            <span class="weather-grid-label l1">35°</span>
-                            <span class="weather-grid-label l2">25°</span>
-                            <span class="weather-grid-label l3">15°</span>
-                            <svg class="weather-area-svg" viewBox="0 0 1000 300" preserveAspectRatio="none" aria-hidden="true">
-                                <defs>
-                                    <linearGradient id="temperatureFill" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stop-color="#d8a77c" stop-opacity="0.9"/>
-                                        <stop offset="58%" stop-color="#a89c86" stop-opacity="0.55"/>
-                                        <stop offset="100%" stop-color="#26344f" stop-opacity="0.05"/>
-                                    </linearGradient>
-                                    <linearGradient id="temperatureLine" x1="0" y1="0" x2="1" y2="0">
-                                        <stop offset="0%" stop-color="#d3a17e"/>
-                                        <stop offset="65%" stop-color="#a9b79a"/>
-                                        <stop offset="100%" stop-color="#d3a17e"/>
-                                    </linearGradient>
-                                </defs>
-                                <path d="M0,82 L90,82 L180,82 L260,100 L310,130 L390,126 L450,140 L520,138 L585,154 L650,150 L720,152 L770,168 L830,150 L900,126 L945,112 L1000,128 L1000,300 L0,300 Z" fill="url(#temperatureFill)"/>
-                                <path d="M0,82 L90,82 L180,82 L260,100 L310,130 L390,126 L450,140 L520,138 L585,154 L650,150 L720,152 L770,168 L830,150 L900,126 L945,112 L1000,128" fill="none" stroke="url(#temperatureLine)" stroke-width="3" vector-effect="non-scaling-stroke"/>
-                                <g stroke="#d7e2f5" stroke-opacity=".12" stroke-dasharray="3 5">
-                                    <path d="M90 0 V300 M180 0 V300 M270 0 V300 M360 0 V300 M450 0 V300 M540 0 V300 M630 0 V300 M720 0 V300 M810 0 V300 M900 0 V300"/>
-                                </g>
-                            </svg>
-                            <div class="weather-sun-event sunrise">🌇 5:37 PM</div>
-                            <div class="weather-sun-event sunset">🌅 6:26 AM</div>
-                        </div>
-                        <div class="weather-rain-row" aria-label="Hourly precipitation probability">
-                            <div class="rain-chance">💧16%</div><div class="rain-chance">💧16%</div>
-                            <div class="rain-chance">💧6%</div><div class="rain-chance">💧14%</div>
-                            <div class="rain-chance">💧12%</div><div class="rain-chance">💧8%</div>
-                            <div class="rain-chance">💧4%</div><div class="rain-chance">💧5%</div>
-                            <div class="rain-chance">💧8%</div><div class="rain-chance">💧7%</div>
-                            <div class="rain-chance">💧6%</div><div class="rain-chance">💧5%</div>
-                        </div>
-                    </div>
                     <div class="banner-slot" id="bannerSlot" aria-label="Metro information banner">
                         <!-- Place your 16:9 image beside this HTML file and name it banner.png -->
                         <img src="https://vectorjungal.com/files/preview/960x960/11729498787kwqsck3wllgfk55mrn5bcpjfevurraec05xbivmmtb8doxzzbqjri0pab530fvf1snjnno8h0zy4ve2wckarxtnmz9e5lyrwpst0.jpg?type=sale" alt="Metro information banner">
@@ -419,6 +244,12 @@
                     <div class="marquee-container">
                         <span class="marquee-text" id="marqueeText">Tuesday, 29 October 2026 • Sector 11, Avas Vikas Colony, Lohamandi, Agra, Uttar Pradesh</span>
                     </div>
+                </div>
+                <div class="video-overlay" id="weatherVideoOverlay" aria-label="Weather video">
+                    <video id="weatherVideo" preload="auto" playsinline muted>
+                        <source src="https://www.image2url.com/r2/default/videos/1793273247312-fd502493-e1c6-48fc-ac43-540f98dbe08a.mp4" type="video/mp4">
+                        Your browser does not support HTML video.
+                    </video>
                 </div>
             </div>
 
@@ -590,40 +421,66 @@
             // Recheck the calendar date periodically in case the display stays on overnight.
             setInterval(updateBoardDateAndWeather, 60000);
 
-            // Existing banner behavior retained: 5 seconds every 15 seconds.
-            // The weather animation appears for 8 seconds every 30 seconds.
-            // It starts 5 seconds into the cycle so it does not overlap the banner.
+            // Existing metro banner behavior retained: 5 seconds every 15 seconds.
             const bannerSlot = document.getElementById('bannerSlot');
-            const weatherAnimation = document.getElementById('weatherAnimation');
             const infoRows = document.querySelectorAll('.top-info-area .info-row');
 
             const BANNER_VISIBLE_MS = 5000;
             const BANNER_CYCLE_MS = 15000;
-            const WEATHER_VISIBLE_MS = 8000;
-            const WEATHER_CYCLE_MS = 30000;
-            const WEATHER_OFFSET_MS = 5000;
-
-            function updateOverlayVisibility() {
-                const bannerPhase = Date.now() % BANNER_CYCLE_MS;
-                const showBanner = bannerPhase < BANNER_VISIBLE_MS;
-
-                const weatherPhase = (Date.now() - WEATHER_OFFSET_MS) % WEATHER_CYCLE_MS;
-                const showWeather = weatherPhase >= 0 && weatherPhase < WEATHER_VISIBLE_MS;
-
-                // Banner takes precedence if timings are ever changed to overlap.
-                const showWeatherNow = showWeather && !showBanner;
-
+            function updateBannerVisibility() {
+                const showBanner = (Date.now() % BANNER_CYCLE_MS) < BANNER_VISIBLE_MS;
                 bannerSlot.classList.toggle('is-visible', showBanner);
-                weatherAnimation.classList.toggle('is-visible', showWeatherNow);
+                infoRows.forEach(row => row.classList.toggle('is-hidden', showBanner));
+            }
+            updateBannerVisibility();
+            setInterval(updateBannerVisibility, 100);
 
-                // Keep the original rows visible whenever neither overlay is active.
-                infoRows.forEach(row => {
-                    row.classList.toggle('is-hidden', showBanner || showWeatherNow);
-                });
+            // Weather video plays from beginning to end, then repeats every 30 seconds
+            // when the clip is shorter than 30 seconds. If longer, it completes fully
+            // and waits 30 seconds before the next playback. The clock stays uncovered.
+            const weatherVideo = document.getElementById('weatherVideo');
+            const weatherVideoOverlay = document.getElementById('weatherVideoOverlay');
+            const VIDEO_GAP_MS = 30000;
+            let videoIsPlaying = false;
+            let nextVideoTimer = null;
+
+            function scheduleNextWeatherVideo(delay = VIDEO_GAP_MS) {
+                if (nextVideoTimer) clearTimeout(nextVideoTimer);
+                nextVideoTimer = setTimeout(playWeatherVideo, delay);
             }
 
-            updateOverlayVisibility();
-            setInterval(updateOverlayVisibility, 100);
+            async function playWeatherVideo() {
+                if (videoIsPlaying) return;
+                videoIsPlaying = true;
+                weatherVideoOverlay.classList.add('is-visible');
+                weatherVideo.currentTime = 0;
+                try {
+                    await weatherVideo.play();
+                } catch (error) {
+                    // If autoplay is blocked, leave the page usable and retry in 30 seconds.
+                    weatherVideoOverlay.classList.remove('is-visible');
+                    videoIsPlaying = false;
+                    scheduleNextWeatherVideo(VIDEO_GAP_MS);
+                }
+            }
+
+            weatherVideo.addEventListener('ended', () => {
+                weatherVideoOverlay.classList.remove('is-visible');
+                videoIsPlaying = false;
+                scheduleNextWeatherVideo(VIDEO_GAP_MS);
+            });
+            weatherVideo.addEventListener('error', () => {
+                weatherVideoOverlay.classList.remove('is-visible');
+                videoIsPlaying = false;
+                scheduleNextWeatherVideo(VIDEO_GAP_MS);
+            });
+
+            // Start immediately; subsequent plays begin 30 seconds after the full clip ends.
+            playWeatherVideo();
         </script>
     </body>
     </html>
+
+
+
+    
